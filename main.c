@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -15,10 +16,9 @@ struct Dictionary {
 
 
 // Clear the terminal screen
-void clearScreen()
-{
-    const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
-    write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
+void clearScreen() {
+    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    fflush(stdout);
 }
 
 void menuOne() {
@@ -26,8 +26,7 @@ void menuOne() {
     sleep(1);
     printf("_________________________"); // len 25
     printf("\nTe rog sa alegi din urmatoarele optiuni: \n\n");
-    printf("(1) Vizualizeaza specialitatile disponibile \n(2) Iesi din aplicatie\n");
-
+    printf("(1) Vizualizeaza specialitatile disponibile \n(2) Iesi din aplicatie\n\n> ");
 }
 
 
@@ -49,16 +48,32 @@ int main() {
         {"Romeo Micu", "Chirurgie"}
     };
 
-    menuOne();
-    int userOption = -1;
-    scanf("%d", &userOption);
+    int userOption;
+    int sizeListaSpecialitati = sizeof(listaSpecialitati) / sizeof(listaSpecialitati[0]);
 
-    if(userOption != 1 || userOption != 2) {
-        printf("(X) Valoare invalida. Incearca din nou\n\n\n\n");
-        sleep(2);
+
+    while (true) {
         menuOne();
-    }
+        scanf("%d", &userOption);
 
+        if (userOption == 1) {
+            clearScreen();
+            printf("Vizualizaza specialitatile disponibile\n");
+            printf("_________________________\n");
+            sleep(1);
+
+            for(int i = 0; i < sizeListaSpecialitati; i++) {
+                printf("%d. %s\n", i + 1, listaSpecialitati[i]);
+            }
+            printf("\n> ");
+            getchar();
+            getchar();
+            clearScreen();
+
+        } else if (userOption != 1 || userOption == 2) {
+            break;
+        }
+    }
     return 0;
 }
 
