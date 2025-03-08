@@ -29,6 +29,18 @@ void menuOne() {
     printf("(1) Vizualizeaza specialitatile disponibile \n(2) Iesi din aplicatie\n\n> ");
 }
 
+void specialtiesMenu(char specialties[][20], int size_list) {
+    clearScreen();
+    printf("Vizualizaza specialitatile disponibile\n");
+    printf("_________________________\n");
+    sleep(1);
+
+    for(int i = 0; i < size_list; i++) {
+        printf("%d. %s\n", i + 1, specialties[i]);
+    }
+    printf("\nPentru a alege medicii disponibili, alege una din specialitati.");
+    printf("\n> ");
+}
 
 int main() {
     char listaSpecialitati[][20] = {
@@ -57,15 +69,28 @@ int main() {
         scanf("%d", &userOption);
 
         if (userOption == 1) {
-            clearScreen();
-            printf("Vizualizaza specialitatile disponibile\n");
-            printf("_________________________\n");
-            sleep(1);
+            specialtiesMenu(listaSpecialitati, sizeListaSpecialitati);
+            scanf("%d", &userOption);
 
-            for(int i = 0; i < sizeListaSpecialitati; i++) {
-                printf("%d. %s\n", i + 1, listaSpecialitati[i]);
+            if (userOption > sizeListaSpecialitati) {
+                while (userOption > sizeListaSpecialitati) {
+                    printf("Optiunea aleasa nu exista. Te rog sa alegi din nou.\n");
+                    sleep(1);
+                    clearScreen();
+                    specialtiesMenu(listaSpecialitati, sizeListaSpecialitati);
+                    scanf("%d", &userOption);
+                }
+            } else {
+                for(int i = 0; i < PAIRS; i++) {
+                    for(int j = 0; j < PAIRS; j++) {
+                        if (strcmp(dict[i].value[j], listaSpecialitati[userOption - 1]) == 0) {
+                            printf("%s\n", dict[i].key);
+                        }
+                    }
+                }
             }
-            printf("\n> ");
+
+
             getchar();
             getchar();
             clearScreen();
