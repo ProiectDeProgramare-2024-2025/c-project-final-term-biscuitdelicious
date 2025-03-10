@@ -4,22 +4,11 @@
 #include <unistd.h>
 
 
-/*
-*Utilizatorul aplicației poate vizualiza medicii și specialitățile disponibile și poate programa o consultație. DONE
-Aplicația permite adăugarea/ștergerea unei programări pentru un anumit pacient cu nume, căutarea unui medic după nume, specialitate și program, programarea consultației și anularea consultației.
-Pentru a efectua programarea pentru o consultație utilizatorul trebuie sa specifice numele, prenumele, telefonul, specialitatea, intervalul orar, ziua și data.
-
- */
-
-// TODO: Crearea unei programari
-
 #define PAIRS 20
 #define STR_LEN 40
 #define MAX_DAYS 7
 #define MAX_SLOTS 5
 #define MAX_SPECIALTIES 5
-
-
 
 // Hard code un dictionar
 struct Dictionary {
@@ -40,6 +29,12 @@ typedef struct {
     // "09:00 - 10:00"
     char timeSlots[MAX_SLOTS][STR_LEN];
 } Doctor;
+
+typedef struct {
+    char name[STR_LEN];
+    char surname[STR_LEN];
+    char phoneNumber[STR_LEN];
+} Pacient;
 
 // Clear the terminal screen
 void clearScreen() {
@@ -70,6 +65,12 @@ void specialtiesMenu(char specialties[][STR_LEN], int size_list) {
     printf("\n> ");
 }
 
+void removeEndLine(char *target) {
+    char* newline = strchr(target, '\n');
+    if(newline) {
+        *newline = '\0';
+    }
+}
 
 
 
@@ -174,6 +175,9 @@ int main() {
             .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
         }
     };
+
+    Pacient pacienti = {};
+
     int doctorsCount = sizeof(doctors) / sizeof(doctors[0]);
 
     int userOption;
@@ -227,10 +231,25 @@ int main() {
             } else {
                 printf("\nDoresti sa programezi o consultatie? (Y/N) ");
                 scanf("%c", &userChoice);
-
                 if (userChoice == 'Y' || userChoice == 'y') {
-                    printf("Functionalitatea de programare nu este inca implementata.\n");
+                    printf("Pentru a programa o consultatie, \nam nevoie de urmatoarele date de la tine:\n");
+                    sleep(1);
+
+                    printf("Numele tau: ");
+                    getchar();
+                    fgets(pacienti.name, STR_LEN, stdin);
+                    removeEndLine(pacienti.name);
+
+                    printf("\nPrenumele tau: ");
+                    fgets(pacienti.surname, STR_LEN, stdin);
+                    removeEndLine(pacienti.surname);
+
+                    printf("\nNumarul tau de telefon: ");
+                    fgets(pacienti.phoneNumber, STR_LEN, stdin);
+                    removeEndLine(pacienti.phoneNumber);
+                    printf("\n\n");
                     sleep(2);
+                    printf("%s %s, %s", pacienti.name, pacienti.surname, pacienti.phoneNumber);
                 }
             }
 
@@ -252,7 +271,9 @@ int main() {
     return 0;
 }
 
-/* Specialitati v
- * Medici v
- * Doresti sa programezi o consultatie? Y/N
+/*
+*Utilizatorul aplicației poate vizualiza medicii și specialitățile disponibile și poate programa o consultație. DONE
+Aplicația permite adăugarea/ștergerea unei programări pentru un anumit pacient cu nume, căutarea unui medic după nume, specialitate și program, programarea consultației și anularea consultației.
+Pentru a efectua programarea pentru o consultație utilizatorul trebuie sa specifice numele, prenumele, telefonul, specialitatea, intervalul orar, ziua și data.
+
  */
