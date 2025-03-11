@@ -38,8 +38,12 @@ typedef struct {
 
 // Clear the terminal screen
 void clearScreen() {
-    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    fflush(stdout);
+#ifdef _WIN32
+    system("cls");
+#endif
+#ifdef linux
+    system("clear");
+#endif
 }
 
 // Show Welcome Menu
@@ -251,6 +255,7 @@ int main() {
                     sleep(2);
                     printf("%s %s, %s", pacienti.name, pacienti.surname, pacienti.phoneNumber);
                 }
+
             }
 
             printf("\nApasa [ENTER] pentru a continua\n");
@@ -268,6 +273,7 @@ int main() {
             sleep(1);
         }
     }
+
     return 0;
 }
 
