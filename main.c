@@ -55,9 +55,9 @@ void clearScreen() {
 #ifdef _WIN32
     system("cls");
 #elif __linux__
-    system("clear");
+    system("clear && printf '\e[3J'");
 #elif  __APPLE__
-    system("clear");
+    system("clear && printf '\e[3J'");
 #endif
 }
 
@@ -79,7 +79,7 @@ void specialtiesMenu(char specialties[][STR_LEN], int size_list) {
     printf("_________________________\n");
     sleep(1);
 
-    for(int i = 0; i < size_list; i++) {
+    for (int i = 0; i < size_list; i++) {
         printf("%d. %s\n", i + 1, specialties[i]);
     }
     printf("\nPentru a alege medicii disponibili, alege una din specialitati.");
@@ -88,8 +88,8 @@ void specialtiesMenu(char specialties[][STR_LEN], int size_list) {
 
 
 void removeEndLine(char *target) {
-    char* newline = strchr(target, '\n');
-    if(newline) {
+    char *newline = strchr(target, '\n');
+    if (newline) {
         *newline = '\0';
     }
 }
@@ -97,7 +97,7 @@ void removeEndLine(char *target) {
 
 void saveDoctorsToFile(Doctor doctors[], int count) {
     FILE *file = fopen("doctors.dat", "wb");
-    if(file == NULL) {
+    if (file == NULL) {
         printf("A aparut o eroare la salvarea doctorilor in fisier!\n");
         return;
     }
@@ -111,14 +111,14 @@ void saveDoctorsToFile(Doctor doctors[], int count) {
 
 int loadDoctorsFromFile(Doctor doctors[], int maxDoctors) {
     FILE *file = fopen("doctors.dat", "rb");
-    if(file == NULL) {
+    if (file == NULL) {
         printf("Nu s-a gasit fisierul cu doctori\n");
         return 0;
     }
 
     int count;
     fread(&count, sizeof(int), 1, file);
-    if(count > maxDoctors) {
+    if (count > maxDoctors) {
         count = maxDoctors;
     }
     fread(doctors, sizeof(Doctor), count, file);
@@ -129,7 +129,7 @@ int loadDoctorsFromFile(Doctor doctors[], int maxDoctors) {
 
 void savePatientsToFile(Pacient patients[], int count) {
     FILE *file = fopen("patients.dat", "wb");
-    if(file == NULL) {
+    if (file == NULL) {
         printf("A aparut o eroare la salvarea pacientilor in fisier! \n");
         return;
     }
@@ -139,33 +139,32 @@ void savePatientsToFile(Pacient patients[], int count) {
     fclose(file);
     sleep(1);
     printf("Pacienti salvati cu success!\n");
-
 }
 
 int loadPatientsFromFile(Pacient patients[], int maxPatients) {
     FILE *file = fopen("patients.dat", "rb");
-    if(file == NULL) {
+    if (file == NULL) {
         printf("Nu s-a gasit fisierul pacienti\n");
         return 0;
     }
 
     int count;
     fread(&count, sizeof(int), 1, file);
-    if(count > maxPatients) {
+    if (count > maxPatients) {
         count = maxPatients;
     }
 
     fread(patients, sizeof(Pacient), count, file);
     fclose(file);
     sleep(1);
-    printf("S-au incarcat %d pacienti din fisier \n, count);
+    printf("S-au incarcat %d pacienti din fisier \n", count);
     return count;
 }
 
 void saveAppointmentsToFile(Appointment appointments[], int count) {
     FILE *file = fopen("appointments.dat", "wb");
 
-    if(file == NULL) {
+    if (file == NULL) {
         printf("Nu s-a gasit fisierul cu programari\n");
         return;
     }
@@ -175,11 +174,12 @@ void saveAppointmentsToFile(Appointment appointments[], int count) {
     fclose(file);
     sleep(1);
     printf("Appointment salvati cu success!\n");
+    return;
 }
 
 int loadAppointmentsFromFile(Appointment appointments[], int maxAppointments) {
     FILE *file = fopen("appointments.dat", "rb");
-    if(file == NULL) {
+    if (file == NULL) {
         printf("Nu s-a gasit fisierul cu programari. \n");
         return 0;
     }
@@ -187,7 +187,7 @@ int loadAppointmentsFromFile(Appointment appointments[], int maxAppointments) {
     int count;
     fread(&count, sizeof(int), 1, file);
 
-    if(count > maxAppointments) {
+    if (count > maxAppointments) {
         count = maxAppointments;
     }
     fread(appointments, sizeof(Appointment), count, file);
@@ -197,14 +197,12 @@ int loadAppointmentsFromFile(Appointment appointments[], int maxAppointments) {
 }
 
 
-
-
 int main() {
-    const char* timeSlots[MAX_SLOTS] = {
+    const char *timeSlots[MAX_SLOTS] = {
         "09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"
     };
 
-    const char* dayNames[MAX_DAYS] = {
+    const char *dayNames[MAX_DAYS] = {
         "Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"
     };
 
@@ -217,101 +215,119 @@ int main() {
         "Urologie"
     };
 
-    Doctor doctors[] = {
-        {
-            .name = "Dana",
-            .surname = "Cristiana",
-            .phoneNumber = "0766-901-234",
-            .specialties = {"Cardiologie", "Pediatrie"},
-            .schedule = {
-                {true, true, false, true, false},
-                {true, true, false, false, false},
-                {false, false, true, true, false},
-                {true, false, false, true, true},
-                {false, false, false, true, true},
-                {false, false, false, false, false},
-                {false, false, false, false, false}
-            },
-            .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
-        },
-        {
-            .name = "Vlad",
-            .surname = "Pedrescu",
-            .phoneNumber = "0755-345-678",
-            .specialties = {"Urologie", "Psihiatrie", "Chirurgie"},
-            .schedule = {
-                {false, false, true, true, true},
-                {true, true, true, false, false},
-                {false, false, false, true, true},
-                {true, true, false, false, false},
-                {false, false, true, true, false},
-                {true, true, false, false, false},
-                {false, false, false, false, false}
-            },
-            .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
-        },
-        {
-            .name = "Daniel",
-            .surname = "Bordas",
-            .phoneNumber = "0744-789-012",
-            .specialties = {"Urologie"},
-            .schedule = {
-                {true, false, false, true, true},
-                {false, false, false, false, false},
-                {true, true, true, false, false},
-                {false, false, true, true, true},
-                {true, true, false, false, false},
-                {false, false, false, true, true},
-                {false, false, false, false, false}
-            },
-            .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
-        },
-        {
-            .name = "Ionut",
-            .surname = "Leahu",
-            .phoneNumber = "0733-123-456",
-            .specialties = {"Cardiologie"},
-            .schedule = {
-                {false, false, false, false, false},
-                {true, true, true, false, false},
-                {false, false, false, true, true},
-                {true, true, false, false, false},
-                {false, false, true, true, true},
-                {false, false, false, false, false},
-                {true, true, false, false, false}
-            },
-            .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
-        },
-        {
-            .name = "Romeo",
-            .surname = "Micu",
-            .phoneNumber = "0722-456-789",
-            .specialties = {"Chirurgie"},
-            .schedule = {
-                {true, true, true, false, false},
-                {false, false, false, true, true},
-                {true, true, false, false, false},
-                {false, false, true, true, false},
-                {true, false, false, true, true},
-                {true, true, false, false, false},
-                {false, false, false, false, false}
-            },
-            .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
-        }
-    };
+    Doctor doctors[MAX_DOCTORS];
+    Pacient patients[MAX_PATIENTS];
+    Appointment appointments[MAX_APPOINTMENTS];
 
-    Pacient pacienti = {};
-    Appointment appointment[MAX_APPOINTMENTS];
-    int sizeAppointment = sizeof(appointment) / sizeof(appointment[0]);
-    int doctorsCount = sizeof(doctors) / sizeof(doctors[0]);
+    int doctorsCount = 0, patientCount = 0, appointmentCount = 0;
+    int sizeAppointment = sizeof(appointments) / sizeof(appointments[0]);
     int sizeListaSpecialitati = sizeof(listaSpecialitati) / sizeof(listaSpecialitati[0]);
-    patientCount = loadPatients(appointment, MAX_PATIENTS);
-    appointmentCount = loadAppointmentsFromFile(appointment, MAX_APPOINTMENTS);
-    saveAppointmentsToFile(doctors, doctorsCount);
 
+    patientCount = loadPatientsFromFile(patients, MAX_PATIENTS);
+    appointmentCount = loadAppointmentsFromFile(appointments, MAX_APPOINTMENTS);
 
+    doctorsCount = loadDoctorsFromFile(doctors, MAX_DOCTORS);
     int userOption;
     char userChoice;
+
+    if (doctorsCount == 0) {
+        printf("Nu s-au gasit doctori. Se adauga doctori... \n");
+
+        Doctor defaultDrs[] = {
+            {
+                .name = "Dana",
+                .surname = "Cristiana",
+                .phoneNumber = "0766-901-234",
+                .specialties = {"Cardiologie", "Pediatrie"},
+                .schedule = {
+                    {true, true, false, true, false},
+                    {true, true, false, false, false},
+                    {false, false, true, true, false},
+                    {true, false, false, true, true},
+                    {false, false, false, true, true},
+                    {false, false, false, false, false},
+                    {false, false, false, false, false}
+                },
+                .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
+            },
+            {
+                .name = "Vlad",
+                .surname = "Pedrescu",
+                .phoneNumber = "0755-345-678",
+                .specialties = {"Urologie", "Psihiatrie", "Chirurgie"},
+                .schedule = {
+                    {false, false, true, true, true},
+                    {true, true, true, false, false},
+                    {false, false, false, true, true},
+                    {true, true, false, false, false},
+                    {false, false, true, true, false},
+                    {true, true, false, false, false},
+                    {false, false, false, false, false}
+                },
+                .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
+            },
+            {
+                .name = "Daniel",
+                .surname = "Bordas",
+                .phoneNumber = "0744-789-012",
+                .specialties = {"Urologie"},
+                .schedule = {
+                    {true, false, false, true, true},
+                    {false, false, false, false, false},
+                    {true, true, true, false, false},
+                    {false, false, true, true, true},
+                    {true, true, false, false, false},
+                    {false, false, false, true, true},
+                    {false, false, false, false, false}
+                },
+                .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
+            },
+            {
+                .name = "Ionut",
+                .surname = "Leahu",
+                .phoneNumber = "0733-123-456",
+                .specialties = {"Cardiologie"},
+                .schedule = {
+                    {false, false, false, false, false},
+                    {true, true, true, false, false},
+                    {false, false, false, true, true},
+                    {true, true, false, false, false},
+                    {false, false, true, true, true},
+                    {false, false, false, false, false},
+                    {true, true, false, false, false}
+                },
+                .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
+            },
+            {
+                .name = "Romeo",
+                .surname = "Micu",
+                .phoneNumber = "0722-456-789",
+                .specialties = {"Chirurgie"},
+                .schedule = {
+                    {true, true, true, false, false},
+                    {false, false, false, true, true},
+                    {true, true, false, false, false},
+                    {false, false, true, true, false},
+                    {true, false, false, true, true},
+                    {true, true, false, false, false},
+                    {false, false, false, false, false}
+                },
+                .timeSlots = {"09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"}
+            }
+        };
+
+        memcpy(doctors, defaultDrs, sizeof(defaultDrs));
+        doctorsCount = sizeof(defaultDrs) / sizeof(defaultDrs[0]);
+
+        for (int i = 0; i < doctorsCount; i++) {
+            for (int j = 0; j < MAX_SLOTS; j++) {
+                strcpy(doctors[i].timeSlots[j], timeSlots[j]);
+            }
+        }
+
+        saveDoctorsToFile(doctors, doctorsCount);
+    }
+
 
     while (true) {
         menuOne();
@@ -333,9 +349,9 @@ int main() {
             }
 
             clearScreen();
-            char* selectedSpecialty = listaSpecialitati[userOption - 1];
+            char *selectedSpecialty = listaSpecialitati[userOption - 1];
             int count = 0;
-
+            int doctorMap[MAX_DOCTORS]; // Maps displayed number to doctor index
             printf("Medici disponibili pentru specialitatea %s:\n", selectedSpecialty);
             printf("_________________________\n");
 
@@ -343,8 +359,11 @@ int main() {
                 for (int j = 0; j < MAX_SPECIALTIES; j++) {
                     if (doctors[i].specialties[j][0] != '\0' &&
                         strcmp(selectedSpecialty, doctors[i].specialties[j]) == 0) {
-                        printf("%d. %s %s - Tel: %s\n", ++count,
+                        doctorMap[count] = i;
+                        printf("%d. %s %s - Tel: %s\n", count + 1,
                                doctors[i].name, doctors[i].surname, doctors[i].phoneNumber);
+                        count++;
+                        break;
                     }
                 }
             }
@@ -365,45 +384,161 @@ int main() {
                     printf("Pentru a programa o consultatie, \nam nevoie de urmatoarele date de la tine:\n");
                     sleep(1);
 
+                    Pacient newPatient;
                     printf("Numele tau: ");
                     getchar();
-                    fgets(pacienti.name, STR_LEN, stdin);
-                    removeEndLine(pacienti.name);
+                    fgets(newPatient.name, STR_LEN, stdin);
+                    removeEndLine(newPatient.name);
 
                     printf("\nPrenumele tau: ");
-                    fgets(pacienti.surname, STR_LEN, stdin);
-                    removeEndLine(pacienti.surname);
+                    fgets(newPatient.surname, STR_LEN, stdin);
+                    removeEndLine(newPatient.surname);
 
                     printf("\nNumarul tau de telefon: ");
-                    fgets(pacienti.phoneNumber, STR_LEN, stdin);
-                    removeEndLine(pacienti.phoneNumber);
-                    printf("\n\n");
-                    sleep(2);
+                    fgets(newPatient.phoneNumber, STR_LEN, stdin);
+                    removeEndLine(newPatient.phoneNumber);
 
-                    printf("\n Te rog sa alegi si o zi in care ai fi disponibil: ");
-                    fgets(appointment->day,)
+                    // Add patient to array
+                    patients[patientCount] = newPatient;
+                    patientCount++;
+
+                    // Select doctor by number
+                    printf("\nAlege un doctor (numar): ");
+                    int doctorChoice;
+                    scanf("%d", &doctorChoice);
+                    getchar();
+
+                    if (doctorChoice < 1 || doctorChoice > count) {
+                        printf("Doctorul selectat nu exista!\n");
+                        printf("\nApasa [ENTER] pentru a continua\n");
+                        getchar();
+                        continue;
+                    }
+
+                    int doctorIndex = doctorMap[doctorChoice - 1];
+
+                    // Select day
+                    printf("\nAlege o zi (1-7):\n");
+                    for (int i = 0; i < MAX_DAYS; i++) {
+                        printf("%d. %s\n", i + 1, dayNames[i]);
+                    }
+                    int dayChoice;
+                    scanf("%d", &dayChoice);
+                    getchar();
+                    int dayIndex = dayChoice - 1;
+
+                    printf("\nAlege un interval orar:\n");
+                    for (int i = 0; i < MAX_SLOTS; i++) {
+                        printf("%d. %s\n", i + 1, timeSlots[i]);
+                    }
+                    int slotChoice;
+                    scanf("%d", &slotChoice);
+                    getchar();
+                    int slotIndex = slotChoice - 1;
+
+                    printf("\nIntroduceti data (ZZ/LL/AAAA): ");
+                    char date[STR_LEN];
+                    fgets(date, STR_LEN, stdin);
+                    removeEndLine(date);
+
+                    // Add this before creating an appointment
+                    if (!doctors[doctorIndex].schedule[dayIndex][slotIndex]) {
+                        printf("Acest interval nu este disponibil pentru doctorul selectat!\n");
+                        printf("\nApasa [ENTER] pentru a continua\n");
+                        getchar();
+                        continue;
+                    }
+                    doctors[doctorIndex].schedule[dayIndex][slotIndex] = false;
+
+                    Appointment newAppointment;
+                    newAppointment.pacient = patients[patientCount - 1];
+                    newAppointment.doctor = doctors[doctorIndex];
+                    newAppointment.day = dayIndex;
+                    newAppointment.timeSlot = slotIndex;
+                    strcpy(newAppointment.date, date);
+
+                    appointments[appointmentCount] = newAppointment;
+                    appointmentCount++;
+
+
+                    savePatientsToFile(patients, patientCount);
+                    saveAppointmentsToFile(appointments, appointmentCount);
                 }
-
             }
 
             printf("\nApasa [ENTER] pentru a continua\n");
             getchar();
             if (userChoice != 'Y' && userChoice != 'y') {
                 getchar();
-
             }
             clearScreen();
         } else if (userOption == 2) {
+            saveDoctorsToFile(doctors, doctorsCount);
+            savePatientsToFile(patients, patientCount);
+            saveAppointmentsToFile(appointments, appointmentCount);
             printf("La revedere!\n");
             break;
+        } else if (userOption == 3) {
+            printf("\n----- FOR TESTING ONLY -----\n");
+            printf("1. Show doctors\n");
+            printf("2. Show patients\n");
+            printf("3. Show appointments\n");
+            printf("4. Salveaza datele manual \n");
+            printf("> ");
+            int debugOption;
+            scanf("%d", &debugOption);
+            getchar();
+
+            if (debugOption == 1) {
+                printf("\nMedici (%d):\n", doctorsCount);
+                for (int i = 0; i < doctorsCount; i++) {
+                    printf("%d. %s %s - Tel: %s\n", i + 1,
+                           doctors[i].name, doctors[i].surname, doctors[i].phoneNumber);
+                    printf("   Specialitati: ");
+                    for (int j = 0; j < MAX_SPECIALTIES && doctors[i].specialties[j][0] != '\0'; j++) {
+                        printf("%s", doctors[i].specialties[j]);
+                        if (doctors[i].specialties[j + 1][0] != '\0') printf(", ");
+                    }
+                    printf("\n");
+                }
+            } else if (debugOption == 2) {
+                // Display patients code
+                printf("\nPacienti (%d):\n", patientCount);
+                for (int i = 0; i < patientCount; i++) {
+                    printf("%d. %s %s - Tel: %s\n", i + 1,
+                           patients[i].name, patients[i].surname, patients[i].phoneNumber);
+                }
+            } else if (debugOption == 3) {
+                // Display appointments code
+                printf("\nProgramari (%d):\n", appointmentCount);
+                for (int i = 0; i < appointmentCount; i++) {
+                    printf("%d. Pacient: %s %s\n", i + 1,
+                           appointments[i].pacient.name, appointments[i].pacient.surname);
+                    printf("   Doctor: %s %s\n",
+                           appointments[i].doctor.name, appointments[i].doctor.surname);
+                    printf("   Zi: %s, Interval: %s, Data: %s\n",
+                           dayNames[appointments[i].day],
+                           appointments[i].doctor.timeSlots[appointments[i].timeSlot],
+                           appointments[i].date);
+                }
+            } else if (debugOption == 4) {
+                saveDoctorsToFile(doctors, doctorsCount);
+                savePatientsToFile(patients, patientCount);
+                saveAppointmentsToFile(appointments, appointmentCount);
+                printf("Date salvate manual cu succes!\n");
+            }
+
+            printf("\nApasa [ENTER] pentru a continua");
+            getchar();
         } else {
             printf("Optiune invalida. Te rog sa alegi din nou.\n");
             sleep(1);
         }
     }
-
     return 0;
 }
+
+
 /*
 *Utilizatorul aplicației poate vizualiza medicii și specialitățile disponibile și poate programa o consultație. DONE
 Aplicația permite adăugarea/ștergerea unei programări pentru un anumit pacient cu nume, căutarea unui medic după nume, specialitate și program, programarea consultației și anularea consultației.
