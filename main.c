@@ -55,9 +55,9 @@ void clearScreen() {
 #ifdef _WIN32
     system("cls");
 #elif __linux__
-    system("clear && printf '\e[3J'");
+    system("clear");
 #elif  __APPLE__
-    system("clear && printf '\e[3J'");
+    system("clear");
 #endif
 }
 
