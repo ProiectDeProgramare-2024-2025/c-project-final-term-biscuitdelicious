@@ -72,7 +72,11 @@ void menuOne() {
 }
 
 
-// Show Specialties Menu
+/*
+ * @param specialties[][] - Array of available medical specialties
+ * @param size_list - Number of specialties in the array
+ */
+// Displays all available medical specialties for user selection
 void specialtiesMenu(char specialties[][STR_LEN], int size_list) {
     clearScreen();
     printf("Vizualizaza specialitatile disponibile\n");
@@ -87,6 +91,10 @@ void specialtiesMenu(char specialties[][STR_LEN], int size_list) {
 }
 
 
+/*
+ * @param target - String to be processed
+ */
+// Removes newline character from the end of a string (for input processing)
 void removeEndLine(char *target) {
     char *newline = strchr(target, '\n');
     if (newline) {
@@ -95,6 +103,11 @@ void removeEndLine(char *target) {
 }
 
 
+/*
+ * @param doctors[] - Array of Doctor structures
+ * @param count - Number of doctors to save
+ */
+// Saves doctor data to a binary file for persistent storage
 void saveDoctorsToFile(Doctor doctors[], int count) {
     FILE *file = fopen("doctors.dat", "wb");
     if (file == NULL) {
@@ -109,6 +122,12 @@ void saveDoctorsToFile(Doctor doctors[], int count) {
     printf("Doctori salvati cu success!\n");
 }
 
+
+/*
+ * @param doctors[] - Array where doctor data will be loaded
+ * @param maxDoctors - Maximum number of doctors that can be loaded
+ */
+// Loads doctor data from the file and returns the count of doctors loaded
 int loadDoctorsFromFile(Doctor doctors[], int maxDoctors) {
     FILE *file = fopen("doctors.dat", "rb");
     if (file == NULL) {
@@ -127,6 +146,12 @@ int loadDoctorsFromFile(Doctor doctors[], int maxDoctors) {
     return count;
 }
 
+
+/*
+ * @param appointments[] - Array of Appointment structures
+ * @param count - Number of appointments to save
+ */
+// Saves appointment data to the file
 void savePatientsToFile(Pacient patients[], int count) {
     FILE *file = fopen("patients.dat", "wb");
     if (file == NULL) {
@@ -141,6 +166,12 @@ void savePatientsToFile(Pacient patients[], int count) {
     printf("Pacienti salvati cu success!\n");
 }
 
+
+/*
+ * @param Pacient patients[] - struct for patients
+ * @param maxPatients - Maximum number for patients
+ */
+// Load the patients from the files and return the number of patients loaded
 int loadPatientsFromFile(Pacient patients[], int maxPatients) {
     FILE *file = fopen("patients.dat", "rb");
     if (file == NULL) {
@@ -161,6 +192,12 @@ int loadPatientsFromFile(Pacient patients[], int maxPatients) {
     return count;
 }
 
+
+/*
+ * @param appointments[] - Array where appointment data will be loaded
+ * @param maxAppointments - Maximum number of appointments
+ */
+// Loads appointment data from the file and returns the count
 void saveAppointmentsToFile(Appointment appointments[], int count) {
     FILE *file = fopen("appointments.dat", "wb");
 
@@ -198,6 +235,13 @@ int loadAppointmentsFromFile(Appointment appointments[], int maxAppointments) {
 
 
 int main() {
+    /*
+ * Initialize essential arrays for program operation:
+ * - timeSlots: Available appointment times
+ * - dayNames: Days of the week
+ * - listaSpecialitati: Available medical specialties
+ */
+
     const char *timeSlots[MAX_SLOTS] = {
         "09:00-10:00", "10:00-11:00", "11:00-12:00", "14:00-15:00", "15:00-16:00"
     };
@@ -441,7 +485,6 @@ int main() {
                     fgets(date, STR_LEN, stdin);
                     removeEndLine(date);
 
-                    // Add this before creating an appointment
                     if (!doctors[doctorIndex].schedule[dayIndex][slotIndex]) {
                         printf("Acest interval nu este disponibil pentru doctorul selectat!\n");
                         printf("\nApasa [ENTER] pentru a continua\n");
@@ -502,14 +545,12 @@ int main() {
                     printf("\n");
                 }
             } else if (debugOption == 2) {
-                // Display patients code
                 printf("\nPacienti (%d):\n", patientCount);
                 for (int i = 0; i < patientCount; i++) {
                     printf("%d. %s %s - Tel: %s\n", i + 1,
                            patients[i].name, patients[i].surname, patients[i].phoneNumber);
                 }
             } else if (debugOption == 3) {
-                // Display appointments code
                 printf("\nProgramari (%d):\n", appointmentCount);
                 for (int i = 0; i < appointmentCount; i++) {
                     printf("%d. Pacient: %s %s\n", i + 1,
@@ -537,11 +578,3 @@ int main() {
     }
     return 0;
 }
-
-
-/*
-*Utilizatorul aplicației poate vizualiza medicii și specialitățile disponibile și poate programa o consultație. DONE
-Aplicația permite adăugarea/ștergerea unei programări pentru un anumit pacient cu nume, căutarea unui medic după nume, specialitate și program, programarea consultației și anularea consultației.
-Pentru a efectua programarea pentru o consultație utilizatorul trebuie sa specifice numele, prenumele, telefonul, specialitatea, intervalul orar, ziua și data.
-
- */
