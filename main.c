@@ -62,7 +62,9 @@ void menuOne() {
     sleep(1);
     printf("_________________________"); // len 25
     printf("\nTe rog sa alegi din urmatoarele optiuni: \n\n");
-    printf("(1) Vizualizeaza specialitatile disponibile \n(2) Iesi din aplicatie\n\n> ");
+    printf("(1) Vizualizeaza specialitatile disponibile\n");
+    printf("(2) Anuleaza o programare\n");
+    printf("(3) Iesi din aplicatie \n\n>");
 }
 
 
@@ -82,6 +84,32 @@ void specialtiesMenu(char specialties[][STR_LEN], int size_list) {
     }
     printf("\nPentru a alege medicii disponibili, alege una din specialitati.");
     printf("\n> ");
+}
+
+
+int deleteAppointment(Doctor doctors[], int doctorsCount, Appointment appointments[], int *appointmentCount,
+                      int index) {
+    if (index < 0 || index >= *appointmentCount) {
+        return 0; // Invalid index
+    }
+
+    int dayIndex = appointments[index].day;
+    int slotIndex = appointments[index].timeSlot;
+
+    for (int i = 0; i < doctorsCount; i++) {
+        if (strcmp(doctors[i].name, appointments[index].doctor.name) == 0 &&
+            strcmp(doctors[i].surname, appointments[index].doctor.surname) == 0) {
+            doctors[i].schedule[dayIndex][slotIndex] = true;
+            break;
+        }
+    }
+
+    for (int i = index; i < (*appointmentCount - 1); i++) {
+        appointments[i] = appointments[i + 1];
+    }
+
+    (*appointmentCount)--;
+    return 1;
 }
 
 
@@ -511,12 +539,58 @@ int main() {
             }
             clearScreen();
         } else if (userOption == 2) {
+            clearScreen();
+            printf("Anulare programare\n");
+            printf("_________________________\n");
+
+            if (appointmentCount == 0) {
+                printf("\nNu exista programari care pot fi anulate!\n");
+            } else {
+                printf("\nProgramari disponibile:\n\n");
+
+                for (int i = 0; i < appointmentCount; i++) {
+                    printf("%d. Pacient: %s %s, Doctor: %s %s\n",
+                           i + 1,
+                           appointments[i].pacient.name,
+                           appointments[i].pacient.surname,
+                           appointments[i].doctor.name,
+                           appointments[i].doctor.surname);
+                    printf("   Data: %s, Zi: %s, Ora: %s\n",
+                           appointments[i].date,
+                           dayNames[appointments[i].day],
+                           timeSlots[appointments[i].timeSlot]);
+                    printf("   ---------------------\n");
+                }
+
+                printf("\nIntroduceti numarul programarii pe care doriti sa o anulati: ");
+                int deleteChoice;
+                scanf("%d", &deleteChoice);
+                getchar();
+
+                if (deleteChoice < 1 || deleteChoice > appointmentCount) {
+                    printf("\nNumarul programarii este invalid!\n");
+                } else {
+                    if (deleteAppointment(doctors, doctorsCount, appointments, &appointmentCount, deleteChoice - 1)) {
+                        printf("\nProgramarea a fost anulata cu succes!\n");
+                        saveDoctorsToFile(doctors, doctorsCount);
+                        saveAppointmentsToFile(appointments, appointmentCount);
+                    } else {
+                        printf("\nA aparut o eroare la anularea programarii!\n");
+                    }
+                }
+            }
+
+            printf("\nApasa [ENTER] pentru a continua\n");
+            getchar();
+            clearScreen();
+        } else if (userOption == 3) {
+            printf("Se salveaza datele.\n");
             saveDoctorsToFile(doctors, doctorsCount);
             savePatientsToFile(patients, patientCount);
             saveAppointmentsToFile(appointments, appointmentCount);
             printf("La revedere!\n");
             break;
-        } else if (userOption == 3) {
+        } else if (userOption == 4) {
             printf("\n----- FOR TESTING ONLY -----\n");
             printf("1. Show doctors\n");
             printf("2. Show patients\n");
