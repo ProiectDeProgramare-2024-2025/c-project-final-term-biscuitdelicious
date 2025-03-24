@@ -85,12 +85,18 @@ void specialtiesMenu(char specialties[][STR_LEN], int size_list) {
     printf("\nPentru a alege medicii disponibili, alege una din specialitati.");
     printf("\n> ");
 }
-
+/*
+ * @param doctors[] - Array of doctors
+ * @param doctorsCount - Number of doctors in the array
+ * @param appointments[] - List of appointments made
+ * @param appointmentCount - Number of appointments
+ * @param index - index given by the user
+ */
 
 int deleteAppointment(Doctor doctors[], int doctorsCount, Appointment appointments[], int *appointmentCount,
                       int index) {
     if (index < 0 || index >= *appointmentCount) {
-        return 0; // Invalid index
+        return 0;
     }
 
     int dayIndex = appointments[index].day;
