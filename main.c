@@ -14,12 +14,6 @@
 #define MAX_PATIENTS 100
 #define MAX_APPOINTMENTS 100
 
-// Hard code un dictionar
-struct Dictionary {
-    char key[STR_LEN];
-    char value[STR_LEN][STR_LEN];
-};
-
 
 typedef struct {
     char name[STR_LEN];
@@ -214,6 +208,7 @@ void saveAppointmentsToFile(Appointment appointments[], int count) {
     return;
 }
 
+
 int loadAppointmentsFromFile(Appointment appointments[], int maxAppointments) {
     FILE *file = fopen("appointments.dat", "rb");
     if (file == NULL) {
@@ -269,8 +264,8 @@ int main() {
 
     patientCount = loadPatientsFromFile(patients, MAX_PATIENTS);
     appointmentCount = loadAppointmentsFromFile(appointments, MAX_APPOINTMENTS);
-
     doctorsCount = loadDoctorsFromFile(doctors, MAX_DOCTORS);
+
     int userOption;
     char userChoice;
 
@@ -446,7 +441,7 @@ int main() {
                     patients[patientCount] = newPatient;
                     patientCount++;
 
-                    // Select doctor by number
+                    // Select doctor by index
                     printf("\nAlege un doctor (numar): ");
                     int doctorChoice;
                     scanf("%d", &doctorChoice);
