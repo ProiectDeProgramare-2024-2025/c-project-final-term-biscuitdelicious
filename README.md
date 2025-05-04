@@ -1,38 +1,110 @@
-# C Project / Menu - 10 Points
-### EN
-Based on your project description, create a .c app that implements a menu.
-You can choose between implementing an interactive menu or a non-interactive one.
+# C Project / Final Term - 20 Points
+## EN
+For the final term of the C project, you must implement the whole application (mandatory to obtain the following points):
 
-**Grading for interactive menu**
-- (2p) Display the menu on the screen
-- (2p) User can select options from the menu (via keyboard reading)
-- (3p) When user enters a submenu, the previous one is cleared and the submenu has a header
-- (3p) When user exits a submenu, the content gets cleared, the app doesn't end and the user is taken back to the previous menu
+### (5p) Validations
+> [!note]
+> Validate all the inputs when requiring them.<br/>
+> Be explicit, add the expected format.
 
-**Grading for non-interactive menu**
-- Use the command line arguments for implementing the options:
-  - (3p) existent options should output `Option <option-name> not implemented!`
-  - (2p) non-existent options should output `Missing option! Too see all available commands, use help!`
-- (3p) Display all the available commands when the app is ran without any arguments
-- (2p) Implement the `help` option that also displays all the commands
+#### Example
 
-! The non-interactive menu doesn't and will not support keyboard reading. Using `cin` or variations to read from keyboard is prohibited.
+```cpp
+'🚫 Please input date:'
+// User doesn't know the expected format
+// User doesn't know what the date is for
 
-### RO
-În funcție de descriere proiectului, creați o aplicație .c care va implementa meniul.
-Puteți alege între implementarea unui meniu interactiv sau a unui meniu non-interactiv.
+'✅ Date of aquisition (dd/mm/yyyy):'
+// User knows the format
+// User knows the date refers to the aquisition date
+```
 
-**Punctarea meniului interactiv**
-- (2p) Afișarea opțiunilor meniului
-- (2p) Utilizatorul poate selecta opțiuni din meniu (prin citirea de la tastatură)
-- (3p) Când utilizatorul intră într-un submeniu, ce era pe ecran înainte se șterge. Submeniul are header astfel încât utilizatorul știe unde se află în momentul respectiv.
-- (3p) Când utilizatorul iasă din submeniu, ce era pe ecran se șterge. Aplicația nu se oprește iar utilizatorul este adus înapoi la meniul anterior
 
-**Punctarea meniului non-interactiv**
-- Folosiți parametrii de pe linia de comanda pentru implementarea opțiunilor:
-  - (3p) opțiunile existente afișează `Opțiunea <nume-opțiune> nu este implementată!`
-  - (2p) opțiunile inexistente afișează `Opțiune lipsă! Pentru a vedea o listă cu toate comenzile accesibile folosiți opțiunea help!`
-- (3p) Afișați toate comenzile / opțiunile accesibile când aplicația este rulată fără parametrii
-- (2p) Implementați comanda `help` pentru a afișa toate opțiunile accesibile
+### (5p) Colors
+> [!note]
+> Add colors to the app.<br/>
+> Colors must not take the whole line.<br/>
+> Color only some elements, like the name of the product, parking lot etc. depending on the project.
 
-! Meniul non-interactiv nu suportă și nu va suporta citirea de la tastatură. Folosirea `cin` sau a variațiilor pentru citirea de la tastatură este interzisă.
+#### Example
+
+🚫 $${\color{red}4. \space Kiwi - 0.68eur \space \(7 pieces\)}$$<br/>
+```cpp
+// All the line is colored. This is the same as all being white, so it's not counted as you using colors
+```
+
+✅ $${\color{darkgray}4. \space \color{lightblue}Kiwi \color{darkgray}- \color{lightgreen}0.68\color{darkgray}eur \space \(\color{orange}7 \color{darkgray}pieces\)}$$<br/>
+```cpp
+// Only the important elements are colored: product name, price and amount
+```
+
+### (5p) Structs
+> [!note]
+> Use C's `struct` to store in app data. For example:
+```cpp
+struct Product {
+  char name[100];
+  int amount;
+  float price;
+}
+```
+
+### (5p) Functions
+> [!note]
+> Extract core logic to separate functions.<br/>
+> For example: `read_file()`, `write_file()`, `add_product(char* name, int amount, ...)` etc.
+
+## RO
+Trebuie implementată aplicația integral pentru termenul final al proiectului C (obligatoriu, pentru obținerea următoarelor puncte):
+
+### (5p) Validări
+> [!note]
+> Validați datele când le cereți.<br/>
+> Fiți expliciți în ceea ce cereți utilizatorului aplicației.
+
+#### Exemplu
+
+```cpp
+'🚫 Introdu data:'
+// Utilizatorul nu știe formatul în care se vrea introdusă data
+// Utilizatorul nu știe pentru ce este introdusă data
+
+'✅ Data achiziționării (zz/ll/aaaa):'
+// Utilizatorul știe formatul
+// Utilizatorul știe că data la care se face referire este data achiziționării
+```
+
+
+### (5p) Culori
+> [!note]
+> Adăugați culori aplicației.<br/>
+> Culorile nu trebuie să fie pe întreaga linie.<br/>
+> Colorați doar anumite elemente precum numele produsului, numele străzii locului de parcare etc. în funcție de ce se cere în proiect.
+
+#### Exemplu
+
+🚫 $${\color{red}4. \space Kiwi - 1.05RON \space \(7 bucăți\)}$$<br/>
+```cpp
+// Linia este colorată în întregime. E la fel ca în cazul în care linia era albă, acest mod nu se contorizează ca folosire de culori.
+```
+
+✅ $${\color{darkgray}4. \space \color{lightblue}Kiwi \color{darkgray}- \color{lightgreen}1.05\color{darkgray}RON \space \(\color{orange}7 \color{darkgray}bucăți\)}$$<br/>
+```cpp
+// Doar elementele importante sunt colorate: numele, prețul și cantitatea produsului
+```
+
+### (5p) Structuri
+> [!note]
+> Folosiți `struct` din C pentru stocharea de date în aplicație. De examplu:
+```cpp
+struct Product {
+  char name[100];
+  int amount;
+  float price;
+}
+```
+
+### (5p) Funcții
+> [!note]
+> Extrageți funcționalitatea de bază a aplicației în funcții separate.<br/>
+> De exemplu: `read_file()`, `write_file()`, `add_product(char* name, int amount, ...)` etc.
