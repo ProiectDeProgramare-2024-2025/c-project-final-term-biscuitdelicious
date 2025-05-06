@@ -47,6 +47,8 @@ typedef struct {
     char date[STR_LEN]; // Format: DD/MM/YYYY
 } Appointment;
 
+
+// Still not working(?)
 void clearScreen() {
 #ifdef _WIN32
     system("cls");
@@ -71,26 +73,26 @@ void removeEndLine(char *target) {
     }
 }
 
-// Helper to get validated integer input within a range
+// Functie sa luam un input valid intre un range
 int getValidatedInt(const char *prompt, int min, int max) {
     int value;
     char buffer[100];
     while (1) {
         printf("%s", prompt);
         if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-            // Check if input is purely numeric
+            // Verificam daca e numar
             bool is_numeric = true;
             char *ptr = buffer;
 
-            // Skip leading whitespace
+            // Ingoram whitespace
             while (isspace((unsigned char)*ptr))
                 ptr++;
 
-            // Check for optional sign
+            // Verificam pentru semn(optional)
             if (*ptr == '+' || *ptr == '-')
                 ptr++;
 
-            // Check digits
+            // Verificam cifre
             if (!isdigit((unsigned char)*ptr)) {
                 is_numeric = false;
             } else {
@@ -98,9 +100,9 @@ int getValidatedInt(const char *prompt, int min, int max) {
                     ptr++;
             }
 
-            // Check trailing whitespace and newline
+            // Verificam whitespace sau endline ramas in input
             while (isspace((unsigned char)*ptr) && *ptr != '\n') ptr++;
-            if (*ptr != '\n' && *ptr != '\0') { // Check if there's non-numeric, non-whitespace chars left
+            if (*ptr != '\n' && *ptr != '\0') {
                  is_numeric = false;
             }
 
@@ -114,18 +116,18 @@ int getValidatedInt(const char *prompt, int min, int max) {
     }
 }
 
-// Helper to get validated non-empty string input
+// Functie sa validam input string
 void getValidatedString(const char *prompt, char *dest, int maxLength) {
     while (1) {
         printf("%s", prompt);
         if (fgets(dest, maxLength, stdin) != NULL) {
             removeEndLine(dest);
-            // Check if the string is not empty or just whitespace
+            // Verificam daca string-ul nu e gol sau are doar spatii
             char *ptr = dest;
             while (isspace((unsigned char)*ptr)) {
                 ptr++;
             }
-            if (*ptr != '\0') { // If it's not the end of the string, it's not empty
+            if (*ptr != '\0') {
                 return;
             }
         }
@@ -140,7 +142,7 @@ bool validateYesNo(const char *prompt) {
     char choice;
     while (1) {
         printf("%s", prompt);
-        if (scanf(" %c", &choice) == 1) { // Note the space before %c to consume leftover whitespace
+        if (scanf(" %c", &choice) == 1) { // Spatiul in plus la %c sa scapam de whitespace ramas in pointer
             getchar();
             choice = toupper(choice);
             if (choice == 'Y' || choice == 'N') {
@@ -250,7 +252,7 @@ int loadPatientsFromFile(Pacient patients[], int maxPatients) {
          fclose(file);
          return 0;
     }
-     if (count < 0) { // Basic sanity check
+     if (count < 0) {
         yellow();
         printf("Numar invalid de pacienti in fisier. Se incepe cu o lista goala.\n");
         reset();
